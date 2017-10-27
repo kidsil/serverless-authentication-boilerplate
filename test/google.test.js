@@ -4,8 +4,10 @@ const signinHandler = require('../authentication/lib/handlers/signinHandler');
 const callbackHandler = require('../authentication/lib/handlers/callbackHandler');
 const refreshHandler = require('../authentication/lib/handlers/refreshHandler');
 const slsAuth = require('serverless-authentication');
+
 const utils = slsAuth.utils;
 const config = slsAuth.config;
+
 const nock = require('nock');
 const expect = require('chai').expect;
 const url = require('url');
@@ -59,7 +61,7 @@ describe('Authentication Provider', () => {
         state = query.state;
         expect(data.headers.Location).to.match(/https:\/\/accounts\.google\.com\/o\/oauth2\/v2\/auth\?client_id=g-mock-id&redirect_uri=https:\/\/api-id\.execute-api\.eu-west-1\.amazonaws\.com\/dev\/authentication\/callback\/google&response_type=code&scope=profile email&state=.{64}/);
         done(null);
-      }});
+      } });
     });
 
     it('should return local client url', (done) => {
@@ -83,7 +85,7 @@ describe('Authentication Provider', () => {
         expect(tokenData.id)
           .to.equal('59d694734e227742db6b6788bdbfb2e5fb5f866c1811fc4d8704aff012e69623');
         done(null);
-      }});
+      } });
     });
 
     it('should get new authorization token', () => {
@@ -92,7 +94,7 @@ describe('Authentication Provider', () => {
       };
 
       refreshHandler(event, (error, data) => {
-        expect(error).to.be.null();
+        expect(error).to.be.null;
         expect(data.authorization_token).to.match(/[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?/);
         expect(data.refresh_token).to.match(/[A-Fa-f0-9]{64}/);
       });

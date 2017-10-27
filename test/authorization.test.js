@@ -2,6 +2,7 @@
 
 const authorize = require('../authentication/lib/handlers/authorizeHandler');
 const slsAuth = require('serverless-authentication');
+
 const utils = slsAuth.utils;
 const config = slsAuth.config;
 const expect = require('chai').expect;
@@ -19,7 +20,7 @@ describe('Authorization', () => {
       };
 
       authorize(event, (error, data) => {
-        expect(error).to.be.null();
+        expect(error).to.be.null;
         expect(data.principalId).to.be.equal(payload.id);
         done(error);
       });

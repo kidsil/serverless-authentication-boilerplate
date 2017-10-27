@@ -2,6 +2,8 @@
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 
+[![Build Status](https://travis-ci.org/laardee/serverless-authentication-boilerplate.svg?branch=master)](https://travis-ci.org/laardee/serverless-authentication-boilerplate)
+
 This project is aimed to be a generic authentication boilerplate for the [Serverless framework](http://www.serverless.com).
 
 This boilerplate is compatible with the Serverless v.1.0.0, to install Serverless framework run `npm install -g serverless`.
@@ -48,6 +50,8 @@ Functions:
 * authentication/authorize
   * endpoint: no end point
   * handler: is used by Api Gateway custom authorizer
+* authentication/schema
+  * invoke with `serverless invoke -f schema` to setup FaunaDB schema
 
 ### Test-token
 
@@ -100,11 +104,20 @@ Package contains example [/authentication/lib/custom-google.js](https://github.c
 
 ## User database
 
+To use FaunaDB to save user data. First [create a database here](https://fauna.com/serverless-cloud-sign-up), then:
+
+1. configure `FAUNADB_SECRET` in `authentication/env.yml` with a server secret for your database
+2. uncomment `return faunaUser.saveUser(profile);` from `authentication/lib/storage/usersStorage.js`
+3. change the last line of  `authentication/lib/storage/cacheStorage.js` to `exports = module.exports = faunaCache;`
+4. Run `serverless deploy` and then `serverless invoke -f schema`
+
 To use DynamoBD to save user data:
+
 1. uncomment `UsersTable` block from `authentication/serverless.yml` resources
-2. uncomment `return saveDatabase(profile);` from `authentication/lib/storage/usersStorage.js`
+2. uncomment `return dynamoUser.saveUser(profile);` from `authentication/lib/storage/usersStorage.js`
 
 To use Cognito User Pool as user database:
+
 1. create new user pool (http://docs.aws.amazon.com/cognito/latest/developerguide/setting-up-cognito-user-identity-pools.html)
 2. copy user pool id to `authentication/env.yml`
 3. uncomment `return saveCognito(profile);` from `authentication/lib/storage/usersStorage.js`
@@ -112,5 +125,5 @@ To use Cognito User Pool as user database:
 ## Running Tests on Mac
 
 * Install Docker and Docker Compose
-* Run `npm install` in project root directory 
-* Run ./specs-docker.sh
+* Run `npm install` in project root directory
+* Run ./run-tests.sh
